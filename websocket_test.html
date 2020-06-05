@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>websocket测试</title>
+        <script type="text/javascript">
+            var ws;
+            window.onload = function() {
+                if ("WebSocket" in window) {
+                    alert("您的浏览器支持 WebSocket!");
+                    ws = new WebSocket("wss://gateway-v2.majsoul.com:5201/");
+                    ws.onmessage = function (evt) { 
+                        var received_msg = evt.data;
+                        console.log(received_msg);
+                        alert("数据已接收...");
+                    };
+                
+                    ws.onclose = function() { 
+                        alert("连接已关闭..."); 
+                    };
+                }
+                else {
+                    alert("您的浏览器不支持 WebSocket!");
+                }
+            }
+
+            function WebSocketTest() {
+                text = document.getElementById("text").value;
+                buffer = new Uint8Array(text.match(/[\da-f]{2}/gi).map(function (h) {
+                    return parseInt(h, 16)
+                })).buffer;
+                ws.send(buffer);
+                alert("数据发送中...");
+            }
+        </script>
+    </head>
+    <body>  
+        <label>复制的hex字符串：</label><input type="text" id="text"></input>
+        <button onclick="WebSocketTest()">运行 WebSocket</button>
+    </body>
+</html>
